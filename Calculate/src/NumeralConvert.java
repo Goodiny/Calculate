@@ -32,7 +32,134 @@ class NumeralConvert {
 	
 	public boolean isRoman(String num) {
 		
-		return romanNumeral.containsKey(num.charAt(0));
+		for(char chr: num.toUpperCase().toCharArray()) 
+			if (!romanNumeral.containsKey(chr)) return false;
+		
+		return true;
+	}
+	
+	private int nextChar(String num, int i) {
+		
+		if (i < (num.length() - 1)) return romanNumeral.get(num.charAt(i+1));
+		
+		return -1;
+	}
+	
+	public String romanToInt(String num) {
+		
+		int current;
+		
+		int d = 0;
+		for(int i= 0; i < num.length(); ++i) {
+			int nextPosition;
+
+			// определение следующего символа
+			nextPosition = nextChar(num, i);
+			
+			// определение текущего символа
+			current = romanNumeral.get(num.charAt(i));
+			
+			// если младший разряд стоит перед старшим разрядом
+			if( (current == 1 || current / 10 == 1 || current / 10 == 10) && 
+					(nextPosition > current && nextPosition <= (current + 2)) ) {
+				d -= current;
+				continue;
+			}
+			d += current;
+		}
+		
+		return String.valueOf(d);
+	}
+	
+	private static String multipleString(String str, int num) {
+		
+		String S = new String();
+		
+		for(int i = 0; i < num; ++i) {
+			S = S + str;
+		}
+		
+		return S;
+	}
+	
+	public String intToRoman(int num) {
+		
+		String S = new String();
+		
+		int units = num % 10;
+		int funits = num % 10 / 5;
+		int dozens = num / 10 % 10;
+		int fdozens = num / 10 % 10 / 5;
+		int hundredths = num / 100 % 10;
+		int fhundredths = num / 100 % 10 / 5;
+		int thousandths = num / 1000;
+		
+		// Разряд тысячных
+		if(thousandths > 0)
+			S += multipleString("M", thousandths);
+		
+		// Разряд сотых
+		if(hundredths == 9) {
+			S += "CM";
+			hundredths = 0;
+			fhundredths = 0;
+		}
+		
+		if(fhundredths > 0) {
+			S += "D";
+			hundredths -= (hundredths > 0) ? 5 : 0;
+		}
+		
+		if(hundredths == 4) {
+			S += "CD";
+			hundredths = 0;
+	}
+		
+		if(hundredths > 0)
+			S += multipleString("C", hundredths);
+		
+		
+		// Разряд десятых
+		if(dozens == 9) {
+			S += "XC";
+			dozens = 0;
+			fdozens = 0;
+		}
+		
+		if(fdozens > 0) {
+			S += "L";
+			dozens -= (dozens > 0) ? 5 : 0;
+		}
+		
+		if(dozens == 4) {
+			S += "XL";
+			dozens = 0;
+		}
+		
+		if(dozens > 0)
+			S += multipleString("X", dozens);
+		
+		// Разряд единиц
+		if(units == 9) {
+			S += "IX";
+			units = 0;
+			funits = 0;
+		}
+		
+		if(funits > 0) { 
+			S += "V";
+			units -= (units > 0) ? 5 : 0;
+		}
+		
+		if(units == 4) {
+			S += "IV";
+			units = 0;
+		}
+		
+		if(units > 0)
+			S += multipleString("I", units);
+		
+		return S;
 	}
 }
 
