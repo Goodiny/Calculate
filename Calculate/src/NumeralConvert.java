@@ -1,11 +1,11 @@
 import java.util.TreeMap;
 
-class NumeralConvert {
+class Numeral {
 	
-	private TreeMap <Character, Integer> romanNumeral = new TreeMap <>();
-	private TreeMap <Integer, String> arabicNumeral = new TreeMap <>(); 
+	private static TreeMap <Character, Integer> romanNumeral = new TreeMap <>();
+	private static TreeMap <Integer, String> arabicNumeral = new TreeMap <>(); 
 	
-	NumeralConvert(){
+	Numeral(){
 		romanNumeral.put('I', 1);
 		romanNumeral.put('V', 5);
 		romanNumeral.put('X', 10);
@@ -30,7 +30,7 @@ class NumeralConvert {
 	}
 	
 	
-	public boolean isRoman(String num) {
+	public static boolean isRoman(String num) {
 		
 		for(char chr: num.toUpperCase().toCharArray()) 
 			if (!romanNumeral.containsKey(chr)) return false;
@@ -38,14 +38,14 @@ class NumeralConvert {
 		return true;
 	}
 	
-	private int nextChar(String num, int i) {
+	private static int nextChar(String num, int i) {
 		
 		if (i < (num.length() - 1)) return romanNumeral.get(num.charAt(i+1));
 		
 		return -1;
 	}
 	
-	public String romanToInt(String num) {
+	public static String romanToInt(String num) {
 		
 		int current;
 		
@@ -73,7 +73,7 @@ class NumeralConvert {
 	
 	private static String multipleString(String str, int num) {
 		
-		String S = new String();
+		String S = "";
 		
 		for(int i = 0; i < num; ++i) {
 			S = S + str;
@@ -82,7 +82,7 @@ class NumeralConvert {
 		return S;
 	}
 	
-	public String intToRoman(int num) {
+	public static String intToRoman(int num) {
 		
 		String S = new String();
 		
