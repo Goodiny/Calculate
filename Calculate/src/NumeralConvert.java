@@ -1,11 +1,17 @@
+import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.Comparator;
 
-class Numeral {
+class NumeralConvert {
 	
-	private static TreeMap <Character, Integer> romanNumeral = new TreeMap <>();
-	private static TreeMap <Integer, String> arabicNumeral = new TreeMap <>(); 
+	private Map <Character, Integer> romanNumeral = new LinkedHashMap<>();
+	private TreeMap <Integer, String> arabicNumeral = new TreeMap <>(); 
 	
-	Numeral(){
+	NumeralConvert(){
 		romanNumeral.put('I', 1);
 		romanNumeral.put('V', 5);
 		romanNumeral.put('X', 10);
@@ -30,7 +36,7 @@ class Numeral {
 	}
 	
 	
-	public static boolean isRoman(String num) {
+	public boolean isRoman(String num) {
 		
 		for(char chr: num.toUpperCase().toCharArray()) 
 			if (!romanNumeral.containsKey(chr)) return false;
@@ -38,34 +44,41 @@ class Numeral {
 		return true;
 	}
 	
-	private static int nextChar(String num, int i) {
+	private int findIndex(String num, int i) {
 		
-		if (i < (num.length() - 1)) return romanNumeral.get(num.charAt(i+1));
+		Object[] keySet = romanNumeral.keySet().toArray();
+		
+		if (i <= (num.length() - 1)) {
+			for(int j = 0; j < keySet.length; ++j)
+				if(keySet[j].equals(num.charAt(i))) return j;
+		}
 		
 		return -1;
 	}
 	
-	public static String romanToInt(String num) {
+	public String romanToInt(String num) {
 		
-		int current;
+		int currentIndex;
 		
 		int d = 0;
 		for(int i= 0; i < num.length(); ++i) {
-			int nextPosition;
-
+			int nextIndex; 
+			
+			int arabian = romanNumeral.get(num.charAt(i));
+			
 			// определение следующего символа
-			nextPosition = nextChar(num, i);
+			nextIndex = findIndex(num, i+1);
 			
 			// определение текущего символа
-			current = romanNumeral.get(num.charAt(i));
+			currentIndex = findIndex(num, i);
 			
-			// если младший разряд стоит перед старшим разрядом
-			if( (current == 1 || current / 10 == 1 || current / 10 == 10) && 
-					(nextPosition > current && nextPosition <= (current + 2)) ) {
-				d -= current;
+			// младший разряд стоит перед старшим разрядом
+			if( (currentIndex % 2 == 0) && 
+					(nextIndex > currentIndex && nextIndex <= (currentIndex + 2)) ) {
+				d -= arabian;
 				continue;
 			}
-			d += current;
+			d += arabian;
 		}
 		
 		return String.valueOf(d);
@@ -82,7 +95,7 @@ class Numeral {
 		return S;
 	}
 	
-	public static String intToRoman(int num) {
+	public String intToRoman(int num) {
 		
 		String S = new String();
 		
