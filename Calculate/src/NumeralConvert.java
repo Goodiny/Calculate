@@ -1,14 +1,9 @@
-import java.lang.reflect.Array;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.Comparator;
 
 class NumeralConvert {
 	
-	private Map <Character, Integer> romanNumeral = new LinkedHashMap<>();
+	private LinkedHashMap <Character, Integer> romanNumeral = new LinkedHashMap<>();
 	private TreeMap <Integer, String> arabicNumeral = new TreeMap <>(); 
 	
 	NumeralConvert(){
@@ -84,6 +79,19 @@ class NumeralConvert {
 		return String.valueOf(d);
 	}
 	
+	public String intToRoman(int num) {
+		
+		String S = "";
+		
+		do {
+			int temp = arabicNumeral.floorKey(num);
+			S += arabicNumeral.get(temp);
+			num -= temp;
+		} while(num != 0); 
+		
+		return S;
+	}
+	
 	private static String multipleString(String str, int num) {
 		
 		String S = "";
@@ -95,9 +103,9 @@ class NumeralConvert {
 		return S;
 	}
 	
-	public String intToRoman(int num) {
+	public String intToRoman2(int num) {
 		
-		String S = new String();
+		String S = "";
 		
 		int units = num % 10;
 		int funits = num % 10 / 5;
