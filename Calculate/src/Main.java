@@ -23,6 +23,9 @@ public class Main {
 			
 		String[] data = line.split(regexpOperandArray[operandIndex]);
 		
+		data[0] = data[0].trim();
+		data[1] = data[1].trim();
+		
 		assertNotDifferentNumeralSystem(data[0], data[1]);
 //			if(Numeral.isRoman(data[0]) == Numeral.isRoman(data[1])) {
 			
@@ -43,11 +46,11 @@ public class Main {
 		if(isRoman) {
 			a = Integer.parseInt(numeral.romanToInt(data[0]));
 			b = Integer.parseInt(numeral.romanToInt(data[1]));
-			
-			assertNotOutOfRomanRange(a, b);
 		}
 		
 		result = calc(a, b, operandArray[operandIndex]);
+		
+		if(isRoman) assertNotOutOfRomanRange(result);
 		
 		String S = isRoman ? numeral.intToRoman(result) : String.valueOf(result);
 		
@@ -91,7 +94,7 @@ public class Main {
 	
 	public static void assertNotTooManyOperand(String str) throws OperandException {
 		
-		if(errorOperands(str) > 1)
+		if(errorOperands(str) == 1)
 			throw new OperandException("Формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
 	}
 	
@@ -107,9 +110,9 @@ public class Main {
 			throw new OutOfRangeException("Введеный символ выходит за указаный диапазон арабских символов 1 - 10");
 	}
 	
-	public static void assertNotOutOfRomanRange(int num1, int num2) throws OutOfRangeException {
+	public static void assertNotOutOfRomanRange(int num) throws OutOfRangeException {
 		
-		if((num1 - num2) < 1) 
+		if(num < 1) 
 			throw new OutOfRangeException("Полученый результат выходит за указанный диапазон значений римских цифр от > I");
 	}
 	
